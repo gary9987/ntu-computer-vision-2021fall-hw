@@ -38,8 +38,7 @@ def erosion(img, mask):
 
     for row in range(img.shape[0]):
         for col in range(img.shape[1]):
-            if maskMatch(img, row, col, mask):
-                new_img[row][col] = 1
+            maskFindLocal(new_img, img, row, col, mask, min, 255)
 
     return new_img
 
@@ -90,6 +89,9 @@ if __name__ == '__main__':
 
     a = dilation(img, mask)
     cv2.imwrite('./output/hw5/a.bmp', a)
+
+    b = erosion(img, mask)
+    cv2.imwrite('./output/hw5/b.bmp', b)
     '''
     b = scaleBackTo0_255(erosion(b_img, mask))
     cv2.imwrite('./output/hw4/b.bmp', b)

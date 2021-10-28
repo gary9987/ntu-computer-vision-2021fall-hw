@@ -1,16 +1,15 @@
 import cv2
 import numpy as np
 
-def maskFindLocal(new_img, img, r, c, mask, func):
+def maskFindLocal(new_img, img, r, c, mask, func, local_init):
 
-    local = 0
     for i in range(-2, 3):
         for j in range(-2, 3):
             if (r + i >= 0 and r + i < img.shape[0] and c + j >= 0 and c + j < img.shape[1]):
                 if(mask[2+i][2+j] == 1):
-                    local = func(local, img[r+i][c+j])
+                    local_init = func(local_init, img[r+i][c+j])
 
-    new_img[r][c] = local
+    new_img[r][c] = local_init
 
 def dilation(img, mask):
 
@@ -18,7 +17,7 @@ def dilation(img, mask):
 
     for row in range(img.shape[0]):
         for col in range(img.shape[1]):
-            maskFindLocal(new_img, img, row, col, mask, max)
+            maskFindLocal(new_img, img, row, col, mask, max, 0)
 
     return new_img
 

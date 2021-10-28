@@ -92,13 +92,10 @@ if __name__ == '__main__':
 
     b = erosion(img, mask)
     cv2.imwrite('./output/hw5/b.bmp', b)
-    '''
-    b = scaleBackTo0_255(erosion(b_img, mask))
-    cv2.imwrite('./output/hw4/b.bmp', b)
     
-    c = scaleBackTo0_255(opening(b_img, mask))
-    cv2.imwrite('./output/hw4/c.bmp', c)
+    c = opening(img, mask)
+    cv2.imwrite('./output/hw5/c.bmp', c)
 
-    d = scaleBackTo0_255(closing(b_img, mask))
-    cv2.imwrite('./output/hw4/d.bmp', d)
-    '''
+    d = closing(img, mask)
+    cv2.imwrite('./output/hw5/d.bmp', d)
+

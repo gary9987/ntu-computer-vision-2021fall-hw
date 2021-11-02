@@ -45,7 +45,7 @@ def closing(img, mask):
 
 if __name__ == '__main__':
 
-    output_file_path = './output/test/'
+    output_file_path = './output/hw5/'
     if not os.path.exists(output_file_path):
         os.makedirs(output_file_path)
 

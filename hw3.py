@@ -32,6 +32,10 @@ if __name__ == '__main__':
 
     img = cv2.imread('lena.bmp', cv2.IMREAD_GRAYSCALE)
 
+    output_file_path = './output/hw3/'
+    if not os.path.exists(output_file_path):
+        os.makedirs(output_file_path)
+
     cv2.imwrite('./output/hw3/a.bmp', img)
     a_hist = calculateDestribution(img)
     plt.bar(list(range(0, 256)), a_hist)

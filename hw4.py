@@ -1,5 +1,6 @@
+import os
+
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
 from hw1 import binarilize
 
@@ -100,6 +101,10 @@ def hitAndMiss(img, j, k):
 
 
 if __name__ == '__main__':
+
+    output_file_path = './output/hw4/'
+    if not os.path.exists(output_file_path):
+        os.makedirs(output_file_path)
 
     img = cv2.imread('lena.bmp', cv2.IMREAD_GRAYSCALE)
     mask = [[0, 1, 1, 1, 0],

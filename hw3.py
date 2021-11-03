@@ -1,3 +1,4 @@
+import os
 from hw2 import calculateDestribution
 import cv2
 import matplotlib.pyplot as plt

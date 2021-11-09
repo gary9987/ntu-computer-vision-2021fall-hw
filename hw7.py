@@ -4,24 +4,24 @@ import numpy as np
 from hw1 import binarilize
 from hw4 import scaleTo0_1, scaleBackTo0_255
 
-def downSampling(img):
 
-    new_img = np.zeros((int(img.shape[0]/8), int(img.shape[1]/8)))
+def downSampling(img):
+    new_img = np.zeros((int(img.shape[0] / 8), int(img.shape[1] / 8)))
 
     for i in range(0, img.shape[0], 8):
         for j in range(0, img.shape[1], 8):
-            new_img[int(i/8)][int(j/8)] = img[i][j]
+            new_img[int(i / 8)][int(j / 8)] = img[i][j]
 
     return new_img
 
-def getAround(img, r, c):
 
+def getAround(img, r, c):
     around = [0] * 9
     ind = 0
     for i in range(-1, 2):
         for j in range(-1, 2):
             if (r + i >= 0 and r + i < img.shape[0] and c + j >= 0 and c + j < img.shape[1]):
-                around[ind] = img[r+i][c+j]
+                around[ind] = img[r + i][c + j]
             else:
                 around[ind] = 0
             ind += 1
@@ -34,36 +34,37 @@ def getAround(img, r, c):
 
     return ret
 
-def hFunc(corner):
 
+def hFunc(corner):
     #  q -1 r 0 s 1
     b = corner[0]
     c = corner[1]
     d = corner[2]
     e = corner[3]
 
-    if(b == c and ( not d == b or not e == b)):
+    if (b == c and (not d == b or not e == b)):
         return -1  # q
-    elif(b == c and ( d == b or e == b)):
+    elif (b == c and (d == b or e == b)):
         return 0
     else:
         return 1
 
+
 def fFunc(h_list):
-    if(h_list.count(0) == 4):
+    if (h_list.count(0) == 4):
         return 5
     else:
         return h_list.count(-1)
 
-def yokoi(img):
 
+def yokoi(img):
     new_img = np.zeros((img.shape[0], img.shape[1]))
 
     # corner
     check_list = [[0, 1, 6, 2], [0, 2, 7, 3], [0, 3, 8, 4], [0, 4, 5, 1]]
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
-            if(img[i][j] != 0):
+            if (img[i][j] != 0):
                 h_list = []
                 # get pixel around pixel
                 around = getAround(img, i, j)
@@ -78,11 +79,10 @@ def yokoi(img):
             else:
                 new_img[i][j] = -1
 
-
     return new_img
 
 
-def pairRealtionOp(img):
+def pairRelationOp(img):
     def h(a, m):
         if a == m:
             return 1
@@ -94,19 +94,21 @@ def pairRealtionOp(img):
     # q : -1 ,  p : 1
     for row in range(img.shape[0]):
         for col in range(img.shape[1]):
-            if(img[row][col] != -1):
+            if img[row][col] != -1:
                 h_sum = 0
                 x_0 = img[row][col]
                 for i in range(4):
-                    if (row + ind[i][0] >= 0 and row + ind[i][0] < img.shape[0] and col + ind[i][1] >= 0 and col + ind[i][1] < img.shape[1]):
+                    if (0 <= row + ind[i][0] < img.shape[0]
+                            and 0 <= col + ind[i][1] < img.shape[1]):
                         h_sum += h(img[row + ind[i][0]][col + ind[i][1]], 1)
 
-                if(h_sum < 1 or x_0 != 1):
+                if h_sum < 1 or x_0 != 1:
                     marked[row][col] = 1  # q
-                elif(h_sum >= 1 and x_0 == 1):
+                elif h_sum >= 1 and x_0 == 1:
                     marked[row][col] = -1  # p
 
     return marked
+
 
 def shrink(img, r, c, marked):
     check_list = [[0, 1, 6, 2], [0, 2, 7, 3], [0, 3, 8, 4], [0, 4, 5, 1]]
@@ -120,7 +122,7 @@ def shrink(img, r, c, marked):
 
     q_amount = fFunc(h_list)
 
-    if(q_amount == 1 and marked[r][c] == -1):
+    if q_amount == 1 and marked[r][c] == -1:
         img[r][c] = 0
 
     return img
@@ -142,14 +144,16 @@ if __name__ == '__main__':
     while True:
         old = new.copy()
         yokoi_img = yokoi(old).astype(int)  # 1 is removable
-        marked = pairRealtionOp(yokoi_img)
+        marked = pairRelationOp(yokoi_img)
 
         for i in range(old.shape[0]):
             for j in range(old.shape[1]):
                 new = shrink(new, i, j, marked)
 
-        cv2.imwrite(output_file_path + str(count) + '.bmp', scaleBackTo0_255(new))
+        # cv2.imwrite(output_file_path + str(count) + '.bmp', scaleBackTo0_255(new))
         count += 1
 
         if np.equal(old, new).all():
             break
+
+    cv2.imwrite(output_file_path + str(count) + '.bmp', scaleBackTo0_255(new))

@@ -1,9 +1,19 @@
+import math
 import os
 import random
 from hw5 import opening, closing
-
 import cv2
 import numpy as np
+
+
+def getSNR(original_img, n_img):
+    original_img = (lambda x: x / 255)(original_img)
+    n_img = (lambda x: x / 255)(n_img)
+    mean = np.mean(original_img)
+    mean_n = np.mean(n_img - original_img)
+    vs = np.mean((lambda x: (x - mean) ** 2)(original_img))
+    vn = np.mean((lambda x: (x - mean_n) ** 2)(n_img - original_img))
+    return 20 * math.log10(math.sqrt(vs) / math.sqrt(vn))
 
 
 def getGaussianNoise(img, amplitude):
@@ -39,7 +49,7 @@ def box(img, r, c, kernel_size):
 
 def applyBoxFilter(img, kernel_size):
     offset = int(kernel_size/2)
-    new_img = np.zeros((img.shape[0]-offset, img.shape[1]-offset))
+    new_img = np.zeros((img.shape[0]-2*offset, img.shape[1]-2*offset))
 
     for i in range(offset, img.shape[0] - offset):
         for j in range(offset, img.shape[1] - offset):
@@ -59,7 +69,7 @@ def median(img, r, c, kernel_size):
 
 def applyMedianFilter(img, kernel_size):
     offset = int(kernel_size/2)
-    new_img = np.zeros((img.shape[0]-offset, img.shape[1]-offset))
+    new_img = np.zeros((img.shape[0]-2*offset, img.shape[1]-2*offset))
 
     for i in range(offset, img.shape[0] - offset):
         for j in range(offset, img.shape[1] - offset):
@@ -180,3 +190,10 @@ if __name__ == '__main__':
 
     c_o_salt010 = opening(closing(salt_and_pepper010, mask), mask)
     cv2.imwrite(output_file_path + 'c_o_salt010' + '.bmp', c_o_salt010)
+
+
+    for filename in os.listdir(output_file_path):
+        noise_img = cv2.imread(output_file_path+filename, cv2.IMREAD_GRAYSCALE)
+        snr = getSNR(img, noise_img)
+        print(filename, snr)
+        

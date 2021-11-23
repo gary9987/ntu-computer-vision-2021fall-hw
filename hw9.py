@@ -1,7 +1,5 @@
 import math
 import os
-import random
-from hw5 import opening, closing
 import cv2
 import numpy as np
 
@@ -251,7 +249,7 @@ if __name__ == '__main__':
         os.makedirs(output_file_path)
 
     img = cv2.imread('lena.bmp', cv2.IMREAD_GRAYSCALE)
-    
+
     roberts = Roberts(img, 12)
     cv2.imwrite(output_file_path + 'roberts' + '.bmp', roberts)
 

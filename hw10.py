@@ -295,7 +295,7 @@ if __name__ == '__main__':
         os.makedirs(output_file_path)
 
     img = cv2.imread('lena.bmp', cv2.IMREAD_GRAYSCALE)
-    '''
+    
     m1 = [[0, 1, 0],
           [1, -4, 1],
           [0, 1, 0]]
@@ -333,7 +333,7 @@ if __name__ == '__main__':
             [0, 0, 0, -1, -1, -2, -1, -1, 0, 0, 0]]
     laplace_of_g = zero_crossing(correlation(img, m4, 3000))
     cv2.imwrite(output_file_path + 'laplace_of_g' + '.bmp', laplace_of_g)
-'''
+
     m5 = [[-1, -3, -4, -6, -7, -8, -7, -6, -4, -3, -1],
          [-3, -5, -8, -11, -13, -13, -13, -11, -8, -5, -3],
          [-4, -8, -12, -16, -17, -17, -17, -16, -12, -8, -4],
